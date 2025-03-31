@@ -185,8 +185,7 @@ jobs:
 
       - name: AnyKernel3
         run: |
-          rm -r out/ak3
-          cp -r ak3 out/
+          mkdir out/ak3
           
           cp out/arch/arm64/boot/Image out/ak3/Image
           find out/arch/arm64/boot/dts/vendor -name '*.dtb' -exec cat {} + > out/ak3/dtb;
