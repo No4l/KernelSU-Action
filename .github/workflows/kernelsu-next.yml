@@ -73,7 +73,7 @@ jobs:
       - name: Setup KernelSU
         run: |
           # https://kernelsu.org/zh_CN/guide/how-to-integrate-for-non-gki.html
-          curl -LSs "https://raw.githubusercontent.com/rifsxd/KernelSU-Next/next-susfs/kernel/setup.sh" | bash -s next-susfs
+          curl -LSs "https://raw.githubusercontent.com/rifsxd/KernelSU-Next/next/kernel/setup.sh" | bash -
 
       - name: "AOSP-Clang: Restore"
         id: aosp_clang_restore
