@@ -190,7 +190,7 @@ jobs:
           
           cp out/arch/arm64/boot/Image out/ak3/Image
           find out/arch/arm64/boot/dts/vendor -name '*.dtb' -exec cat {} + > out/ak3/dtb;
-          wget https://raw.githubusercontent.com/No4l/android_kernel_oneplus_sm8350_build/refs/heads/build/mkdtboimg.py
+          cp this-repo/mkdtboimg.py mkdtboimg.py
           python mkdtboimg.py create out/ak3/dtbo.img out/arch/arm64/boot/dts/vendor/oplus/lemonadev/*.dtbo
           
           cd out/ak3
