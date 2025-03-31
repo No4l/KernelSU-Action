@@ -185,18 +185,40 @@ jobs:
 
       - name: AnyKernel3
         run: |
-          mkdir out/ak3
-          
-          cp out/arch/arm64/boot/Image out/ak3/Image
-          find out/arch/arm64/boot/dts/vendor -name '*.dtb' -exec cat {} + > out/ak3/dtb;
-          cp this-repo/mkdtboimg.py mkdtboimg.py
-          python mkdtboimg.py create out/ak3/dtbo.img out/arch/arm64/boot/dts/vendor/oplus/lemonadev/*.dtbo
-          
-          cd out/ak3
-          zip -r9 lemonade-$(/bin/date -u '+%Y%m%d-%H%M').zip .
+          curl -Lo AnyKernel3.zip https://github.com/osm0sis/AnyKernel3/archive/refs/heads/master.zip
+          unzip AnyKernel3.zip
+
+          cat >AnyKernel3-master/anykernel.sh <<EOF
+          properties() { '
+          kernel.string=$kernel_repository $kernel_branch with KernelSU $kernelsu_remote_version for $device
+          do.devicecheck=0
+          do.modules=0
+          do.cleanup=1
+          do.cleanuponabort=1
+          device.name1=$device
+          '; }
+
+          block=auto
+          is_slot_device=auto
+          ramdisk_compression=auto
+          patch_vbmeta_flag=auto
+
+          . tools/ak3-core.sh
+          split_boot
+          flash_boot
+          EOF
+
+          cp out/arch/arm64/boot/Image.gz-dtb AnyKernel3-master/
+          if [ -f out/arch/arm64/boot/dtbo.img ]; then
+              cp out/arch/arm64/boot/dtbo.img AnyKernel3-master/
+          fi
+
+          cd AnyKernel3-master
+          rm -rf .git* README.md
+          zip -r ../boot.zip *
 
       - name: "Upload artifact"
         uses: actions/upload-artifact@v4
         with:
           name: boot
-          path: out/ak3/*.zip
+          path: AnyKernel3-master/*
