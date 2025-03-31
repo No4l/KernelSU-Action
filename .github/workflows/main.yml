@@ -32,7 +32,6 @@ jobs:
           remote_version=v0.9.5
           echo local_version=$local_version | tee -a $GITHUB_OUTPUT
           echo remote_version=$remote_version | tee -a $GITHUB_OUTPUT
-          wget https://raw.githubusercontent.com/No4l/android_kernel_oneplus_sm8350_build/refs/heads/build/mkdtboimg.py
     outputs:
       local_version: ${{ steps.check_kernelsu_version.outputs.local_version }}
       remote_version: ${{ steps.check_kernelsu_version.outputs.remote_version }}
@@ -48,7 +47,6 @@ jobs:
       - name: Set env
         run: |
           echo kernelsu_remote_version=${{ needs.check_kernelsu_update.outputs.remote_version }} | tee -a $GITHUB_ENV
-          wget https://raw.githubusercontent.com/No4l/android_kernel_oneplus_sm8350_build/refs/heads/build/mkdtboimg.py
           if [[ "$clang_version" = "r"* ]] || [[ "$clang_version" = "latest" ]]; then
               clang_type=aosp
           else
