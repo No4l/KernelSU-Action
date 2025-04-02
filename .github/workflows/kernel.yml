@@ -139,10 +139,29 @@ jobs:
 
       - name: AnyKernel3
         run: |
-          zip -r boot.zip out/target/product/${device}/boot.img
+          file_name="boot.img"
+          # 定义压缩后的文件名
+          zip_file_name="${file_name}.zip"
+          
+          # 使用 find 命令查找文件
+          found_file=$(find ./ -name "$file_name")
+          
+          # 检查文件是否找到
+          if [ -n "$found_file" ]; then
+            echo "找到文件: $found_file"
+            echo "正在压缩到 $zip_file_name..."
+            zip "$zip_file_name" "$found_file"
+            if [ $? -eq 0 ]; then
+              echo "文件 $found_file 成功压缩为 $zip_file_name"
+            else
+              echo "压缩文件 $found_file 失败"
+            fi
+          else
+            echo "未找到文件: $file_name"
+          fi
 
       - name: "Upload artifact"
         uses: actions/upload-artifact@v4
         with:
           name: boot
-          path: boot.zip
+          path: boot.img.zip
